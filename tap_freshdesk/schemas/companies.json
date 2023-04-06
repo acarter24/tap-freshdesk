@@ -1,0 +1,57 @@
+{
+    "type": "object",
+    "properties": {
+      "id": {
+        "type": ["null", "integer"]
+      },
+      "name": {
+        "type": ["null", "string"]
+      },
+      "description": {
+        "type": ["null", "string"]
+      },
+      "note": {
+        "type": ["null", "string"]
+      },
+      "domains": {
+        "type": ["null", "array"],
+        "items": {
+          "type": ["null", "string"]
+        }
+      },
+      "created_at": {
+        "type": ["null", "string"],
+        "format": "date-time"
+      },
+      "updated_at": {
+        "type": ["null", "string"],
+        "format": "date-time"
+      },
+      "custom_fields": {
+        "type": ["null", "array"],
+        "items": {
+          "type": ["null", "object"],
+          "properties": {
+            "name": {
+              "type": ["null", "string"]
+            },
+            "value": {
+              "type": ["null", "string"]
+            }
+          }
+        }
+      },
+      "health_score": {
+        "type": ["null", "string"]
+      },
+      "account_tier": {
+        "type": ["null", "string"]
+      },
+      "industry": {
+        "type": ["null", "string"]
+      },    
+      "renewal_date": {
+        "type": ["null", "date"]
+      }
+  }
+}

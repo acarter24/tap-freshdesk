@@ -1,0 +1,111 @@
+{
+    "type": "object", 
+    "properties": {
+      "active": {
+        "type": [
+          "null", 
+          "boolean"
+        ]
+      }, 
+      "address": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "description": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "email": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "id": {
+        "type": [
+          "null", 
+          "integer"
+        ]
+      }, 
+      "job_title": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "language": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "mobile": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "name": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      }, 
+      "phone": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      },
+      "time_zone": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      },
+      "twitter_id": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      },  
+      "custom_fields": {
+        "type": ["null", "array"],
+        "items": {
+          "type": ["null", "object"],
+          "properties": {
+            "name": {
+              "type": ["null", "string"]
+            },
+            "value": {
+              "type": ["null", "string"]
+            }
+          }
+        }
+      },
+      "facebook_id": {
+        "type": [
+          "null", 
+          "string"
+        ]
+      },  
+      "created_at": {
+        "type": [
+          "null", 
+          "string"
+        ], 
+        "format": "date-time"
+      }, 
+      "updated_at": {
+        "type": [
+          "null", 
+          "string"
+        ], 
+        "format": "date-time"
+      }
+    }
+  }
