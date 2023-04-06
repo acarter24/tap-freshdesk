@@ -22,6 +22,14 @@ class FreshdeskStream(RESTStream):
     """freshdesk stream class."""
     name: str
     records_jsonpath = "$.[*]"  # Or override `parse_response`.
+    primary_keys = ["id"]
+
+    @property
+    def path(self) -> str:
+        """
+        'groups' -> '/groups'
+        """
+        return f'/{self.name}'
 
     @property
     def schema_filepath(self) -> Path | None:
@@ -164,6 +172,7 @@ class FreshdeskPaginator(BasePageNumberPaginator):
         """
         return len(response.json())
     
+
 class PagedFreshdeskStream(FreshdeskStream):
 
     def get_url_params(

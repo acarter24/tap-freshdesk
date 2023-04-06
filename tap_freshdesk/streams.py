@@ -15,47 +15,24 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
     
 
 class AgentsStream(FreshdeskStream):
-    """Define custom stream."""
-
     name = "agents"
-    path = "/agents"
-    primary_keys = ["id"]
     
 
 class CompaniesStream(FreshdeskStream):
-    """Define custom stream."""
-
     name = "companies"
-    path = "/companies"
-    primary_keys = ["id"]
-
-
-class TicketsStream(PagedFreshdeskStream):
-    """Define custom stream."""
-
-    name = "tickets"
-    path = "/tickets"
-    primary_keys = ["id"]
 
 
 class TicketFieldsStream(FreshdeskStream):
-    """Define custom stream."""
-
     name = "ticket_fields"
-    path = "/ticket_fields"
-    primary_keys = ["id"]
+
 
 class GroupsStream(FreshdeskStream):
-    """Define custom stream."""
-
     name = "groups"
-    path = "/groups"
-    primary_keys = ["id"]
 
 
 class ContactsStream(FreshdeskStream):
-    """Define custom stream."""
-
     name = "contacts"
-    path = "/contacts"
-    primary_keys = ["id"]
+
+
+class TicketsStream(PagedFreshdeskStream):
+    name = "tickets"
