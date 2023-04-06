@@ -9,6 +9,10 @@ from singer_sdk import typing as th  # JSON schema typing helpers
 from tap_freshdesk import streams
 
 
+from pathlib import Path
+config = Path(__file__).parent.parent / '.secrets' / 'config.json'
+
+
 class Tapfreshdesk(Tap):
     """freshdesk tap class."""
 
@@ -48,14 +52,17 @@ class Tapfreshdesk(Tap):
             A list of discovered streams.
         """
         return [
-            streams.AgentsStream(self),
-            streams.CompaniesStream(self),
-            streams.TicketsStream(self),
-            streams.TicketFieldsStream(self),
-            streams.GroupsStream(self),
-            streams.ContactsStream(self),
+            # streams.AgentsStream(self),
+            # streams.CompaniesStream(self),
+            # streams.TicketsStream(self),
+            # streams.TicketFieldsStream(self),
+            # streams.GroupsStream(self),
+            # streams.ContactsStream(self),
+            streams.TicketDetailStream(self),
+            streams.ConversationsStream(self),
         ]
 
 
+
 if __name__ == "__main__":
-    Tapfreshdesk.cli()
+    Tapfreshdesk(config=config).cli()

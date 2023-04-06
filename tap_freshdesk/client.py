@@ -25,6 +25,10 @@ class FreshdeskStream(RESTStream):
     primary_keys = ["id"]
 
     @property
+    def backoff_max_tries(self) -> int:
+        return 10
+
+    @property
     def path(self) -> str:
         """
         'groups' -> '/groups'
@@ -193,7 +197,8 @@ class PagedFreshdeskStream(FreshdeskStream):
         params['per_page'] = 100
         if next_page_token:
             params["page"] = next_page_token
-        params['updated_since'] = self._config['updated_since']
+        if 'updated_since' not in context:
+            params['updated_since'] = self._config['start_date']
         return params
 
     def get_new_paginator(self) -> BasePageNumberPaginator:

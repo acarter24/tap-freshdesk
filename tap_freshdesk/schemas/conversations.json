@@ -1,0 +1,134 @@
+{
+    "type": "object",
+    "properties": {
+        "body_text": {
+            "type": ["null", "string"]
+        },
+        "id": {
+            "type": ["null", "integer"]
+        },
+        "incoming": {
+            "type": ["null", "boolean"]
+        },
+        "private": {
+            "type": ["null", "boolean"]
+        },
+        "user_id": {
+            "type": ["null", "integer"]
+        },
+        "support_email": {
+            "type": ["null", "string"]
+        },
+        "source": {
+            "type": ["null", "integer"]
+        },
+        "category": {
+            "type": ["null", "integer"]
+        },
+        "email_failure_count": {
+            "type": ["null", "integer"]
+        },
+        "outgoing_failures": {
+            "type": ["null", "integer"]
+        },
+        "thread_id": {
+            "type": ["null", "integer"]
+        },
+        "thread_message_id": {
+            "type": ["null", "integer"]
+        },
+        "last_edited_at": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "last_edited_user_id": {
+            "type": ["null", "integer"]
+        },
+        "automation_id": {
+            "type": ["null", "integer"]
+        },
+        "automation_type_id": {
+            "type": ["null", "integer"]
+        },
+        "auto_response": {
+            "type": ["null", "boolean"]
+        },
+        "source_additional_info": {
+            "type": ["null", "string"]
+        },
+        "ticket_id": {
+            "type": ["null", "integer"]
+        },
+        "to_emails": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "from_email": {
+            "type": ["null", "string"]
+        },
+        "cc_emails": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "bcc_emails": {
+            "anyOf": [
+                {
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "created_at": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "updated_at": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        }
+    }
+}
