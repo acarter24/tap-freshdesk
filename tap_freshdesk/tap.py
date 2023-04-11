@@ -45,6 +45,15 @@ class Tapfreshdesk(Tap):
             th.StringType,
             description="The url for the API service",
         ),
+        ## these two below to enable stream mapping
+        th.Property(
+            "stream_map",
+            th.ObjectType,
+        ),
+        th.Property(
+            "stream_map_config",
+            th.ObjectType,
+        ),
     ).to_dict()
 
     
