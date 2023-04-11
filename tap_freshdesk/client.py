@@ -3,7 +3,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Any, Callable, Iterable, TYPE_CHECKING
+from typing import Any, Callable, Iterable, TYPE_CHECKING, Generator
 
 import requests
 from singer_sdk.authenticators import BasicAuthenticator
@@ -165,6 +165,19 @@ class FreshdeskStream(RESTStream):
     
     def get_new_paginator(self) -> SinglePagePaginator:
         return SinglePagePaginator()
+    
+    def backoff_wait_generator(self) -> Generator[float, None, None]:
+        return self.backoff_runtime(value=self._wait_for)
+    
+    @staticmethod
+    def _wait_for(exception) -> int:
+        """
+        When 429 thrown, header contains the time to wait before
+        the next call is allowed, rather than use exponential backoff"""
+        return int(exception.response.headers['Retry-After'])
+    
+    def backoff_jitter(self, value: float) -> float:
+        return value
 
 class FreshdeskPaginator(BasePageNumberPaginator):
 
