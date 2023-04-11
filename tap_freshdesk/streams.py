@@ -71,9 +71,7 @@ class TicketsSummaryStream(PagedFreshdeskStream):
         }
 
 class TicketsDetailStream(FreshdeskStream):
-    name = 'tickets_detail'
-    parent_stream_type = TicketsSummaryStream   # this to force order, need Summary to run first
-    state_partitioning_keys = []
+    name = 'zzzz_tickets_detail'   # needs the z's to run AFTER ticket_summary
 
     def __init__(self, *args, **kwargs):
         self.ticket_ids: set = kwargs.pop('ticket_ids')
