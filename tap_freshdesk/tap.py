@@ -47,12 +47,12 @@ class Tapfreshdesk(Tap):
         ),
         ## these two below to enable stream mapping
         th.Property(
-            "stream_map",
-            th.ObjectType,
+            "stream_maps",
+            th.ObjectType(),
         ),
         th.Property(
             "stream_map_config",
-            th.ObjectType,
+            th.ObjectType(),
         ),
     ).to_dict()
 
