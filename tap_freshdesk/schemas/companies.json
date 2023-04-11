@@ -28,7 +28,7 @@
         "format": "date-time"
       },
       "custom_fields": {
-        "type": ["null", "array"],
+        "type": ["null", "array", "object"],
         "items": {
           "type": ["null", "object"],
           "properties": {
