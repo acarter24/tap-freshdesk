@@ -64,6 +64,12 @@ class TicketsSummaryStream(PagedFreshdeskStream):
     def post_process(self, row: dict, context: dict | None = None) -> dict | None:
         self.ticket_ids.add(row['id'])
 
+    def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
+        """Return a context dictionary for child streams."""
+        return {
+            "ticket_id": record["id"],
+        }
+
 class TicketsDetailStream(FreshdeskStream):
     name = 'tickets_detail'
     parent_stream_type = TicketsSummaryStream   # this to force order, need Summary to run first
