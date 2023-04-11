@@ -6,7 +6,7 @@ from pathlib import Path
 import copy
 
 from singer_sdk import typing as th  # JSON Schema typing helpers
-from singer_sdk import Tap
+from singer_sdk import Tap, metrics
 
 from tap_freshdesk.client import FreshdeskStream, PagedFreshdeskStream
 
@@ -17,47 +17,6 @@ SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
     
 
 
-class FakeTapfreshdesk(Tap):
-    """freshdesk tap class."""
-
-    name = "tap-freshdesk"
-
-    # TODO: Update this section with the actual config values you expect:
-    config_jsonschema = th.PropertiesList(
-        th.Property(
-            "username",
-            th.StringType,
-            required=True,
-            secret=True,  # Flag config as protected.
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "password",
-            th.StringType,
-            required=True,
-            description="Project IDs to replicate",
-        ),
-        th.Property(
-            "start_date",
-            th.DateTimeType,
-            description="The earliest record date to sync",
-        ),
-        th.Property(
-            "domain",
-            th.StringType,
-            description="The url for the API service",
-        ),
-    ).to_dict()
-
-    def discover_streams(self) -> list[FreshdeskStream]:
-        """Return a list of discovered streams.
-
-        Returns:
-            A list of discovered streams.
-        """
-        return [
-            TicketsStream(self),
-        ]
 
 class AgentsStream(FreshdeskStream):
     name = "agents"
@@ -79,13 +38,48 @@ class ContactsStream(FreshdeskStream):
     name = "contacts"
 
 
-class TicketsStream(PagedFreshdeskStream):
-    name = "tickets"
-
-class TicketDetailStream(FreshdeskStream):
-    _LOG_REQUEST_METRIC_URLS = True
-    name = 'tickets'
+class TicketsSummaryStream(PagedFreshdeskStream):
+    name = "tickets_summary"
     replication_key = 'updated_at'
+
+    def __init__(self, *args, **kwargs):
+        self.ticket_ids: set = kwargs.pop('ticket_ids')
+        super().__init__(*args, **kwargs)
+    
+    @property
+    def path(self) -> str:
+        return '/tickets'
+    
+    @property
+    def schema_filepath(self) -> Path | None:
+        return SCHEMAS_DIR / 'tickets.json'
+    
+    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+        context = context or {}
+        records = self.request_records(context=context)
+        for rec in records:
+            self.post_process(rec)
+            yield rec
+
+    def post_process(self, row: dict, context: dict | None = None) -> dict | None:
+        self.ticket_ids.add(row['id'])
+
+class TicketsDetailStream(FreshdeskStream):
+    name = 'tickets_detail'
+    parent_stream_type = TicketsSummaryStream   # this to force order, need Summary to run first
+    state_partitioning_keys = []
+
+    def __init__(self, *args, **kwargs):
+        self.ticket_ids: set = kwargs.pop('ticket_ids')
+        super().__init__(*args, **kwargs)
+
+    @property
+    def path(self) -> str:
+        return '/tickets'
+    
+    @property
+    def schema_filepath(self) -> Path | None:
+        return SCHEMAS_DIR / 'tickets.json'
 
     def get_child_context(self, record: dict, context: Optional[dict]) -> dict:
         """Return a context dictionary for child streams."""
@@ -106,75 +100,48 @@ class TicketDetailStream(FreshdeskStream):
                 url = url.replace(search_text, self._url_encode(v))
         return url
 
-    def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
+    def request_records(self, context: dict | None) -> Iterable[dict]:
+        """Request records from REST endpoint(s), returning response records.
+
+        If pagination is detected, pages will be recursed automatically.
+
+        Args:
+            context: Stream partition or context dictionary.
+
+        Yields:
+            An item for every record in the response.
+        """
+        paginator = self.get_new_paginator()
+        decorated_request = self.request_decorator(self._request)
         context = context or {}
-        if 'updated_at' not in context:  #  have to provide manually
-            context['updated_at'] = self._config['start_date']
-        records = list(FakeTapfreshdesk(config=self._config).streams['tickets'].get_records(context=context))
-        ticket_ids = [v['id'] for v in records]
-        for ticket_id in ticket_ids:
+        
+        for ticket_id in self.ticket_ids:
             context['ticket_id'] = ticket_id
-            records = self.request_records(context=context)
-            for rec in records:
-                yield rec
+
+            with metrics.http_request_counter(self.name, self.path) as request_counter:
+                request_counter.context = context
+
+                while not paginator.finished:
+                    prepared_request = self.prepare_request(
+                        context,
+                        next_page_token=paginator.current_value,
+                    )
+                    resp = decorated_request(prepared_request, context)
+                    request_counter.increment()
+                    self.update_sync_costs(prepared_request, resp, context)
+                    yield from self.parse_response(resp)
+
+                    paginator.advance(resp)
 
 class ConversationsStream(FreshdeskStream):
-    # Note that this class inherits from the GitlabStream base class, and not from
-    # the EpicsStream class.
-
-    _LOG_REQUEST_METRIC_URLS = True
 
     name = "conversations"
 
     # EpicIssues streams should be invoked once per parent epic:
-    parent_stream_type = TicketDetailStream
-
-    # Assume epics don't have `updated_at` incremented when issues are changed:
+    parent_stream_type = TicketsDetailStream
     ignore_parent_replication_keys = True
 
     # Path is auto-populated using parent context keys:
     path = "/tickets/{ticket_id}/conversations"
 
     state_partitioning_keys = []
-
-class FakeTapfreshdesk(Tap):
-    """freshdesk tap class."""
-
-    name = "tap-freshdesk"
-
-    # TODO: Update this section with the actual config values you expect:
-    config_jsonschema = th.PropertiesList(
-        th.Property(
-            "username",
-            th.StringType,
-            required=True,
-            secret=True,  # Flag config as protected.
-            description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "password",
-            th.StringType,
-            required=True,
-            description="Project IDs to replicate",
-        ),
-        th.Property(
-            "start_date",
-            th.DateTimeType,
-            description="The earliest record date to sync",
-        ),
-        th.Property(
-            "domain",
-            th.StringType,
-            description="The url for the API service",
-        ),
-    ).to_dict()
-
-    def discover_streams(self) -> list[FreshdeskStream]:
-        """Return a list of discovered streams.
-
-        Returns:
-            A list of discovered streams.
-        """
-        return [
-            TicketsStream(self),
-        ]

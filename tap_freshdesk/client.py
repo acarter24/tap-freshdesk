@@ -211,7 +211,7 @@ class PagedFreshdeskStream(FreshdeskStream):
         if next_page_token:
             params["page"] = next_page_token
         if 'updated_since' not in context:
-            params['updated_since'] = self._config['start_date']
+            params['updated_since'] = self.get_starting_timestamp(context)
         return params
 
     def get_new_paginator(self) -> BasePageNumberPaginator:

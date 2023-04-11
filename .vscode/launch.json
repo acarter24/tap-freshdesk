@@ -8,7 +8,7 @@
         "type": "python",
         "request": "launch",
         "module": "tap_freshdesk.tap",
-        "args": ["--config", ".secrets/config.json"],
+        "args": ["--config", ".secrets/config.json", "--state", ".secrets/state.json"],
         "python": "${command:python.interpreterPath}",
         // Set to true to debug third-party library code
         "justMyCode": true,

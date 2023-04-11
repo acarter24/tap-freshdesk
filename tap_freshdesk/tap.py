@@ -12,6 +12,8 @@ from tap_freshdesk import streams
 from pathlib import Path
 config = Path(__file__).parent.parent / '.secrets' / 'config.json'
 
+_ticket_ids = set()
+
 
 class Tapfreshdesk(Tap):
     """freshdesk tap class."""
@@ -45,6 +47,8 @@ class Tapfreshdesk(Tap):
         ),
     ).to_dict()
 
+    
+
     def discover_streams(self) -> list[streams.FreshdeskStream]:
         """Return a list of discovered streams.
 
@@ -54,13 +58,16 @@ class Tapfreshdesk(Tap):
         return [
             # streams.AgentsStream(self),
             # streams.CompaniesStream(self),
-            # streams.TicketsStream(self),
+            
             # streams.TicketFieldsStream(self),
             # streams.GroupsStream(self),
             # streams.ContactsStream(self),
-            streams.TicketDetailStream(self),
+            
+            streams.TicketsSummaryStream(tap=self, ticket_ids=_ticket_ids),
+            streams.TicketsDetailStream(tap=self, ticket_ids=_ticket_ids),
             streams.ConversationsStream(self),
         ]
+
 
 
 
