@@ -23,17 +23,11 @@ class Tapfreshdesk(Tap):
     # TODO: Update this section with the actual config values you expect:
     config_jsonschema = th.PropertiesList(
         th.Property(
-            "username",
+            "api_key",
             th.StringType,
             required=True,
             secret=True,  # Flag config as protected.
             description="The token to authenticate against the API service",
-        ),
-        th.Property(
-            "password",
-            th.StringType,
-            required=True,
-            description="Project IDs to replicate",
         ),
         th.Property(
             "start_date",

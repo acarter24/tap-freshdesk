@@ -56,8 +56,8 @@ class FreshdeskStream(RESTStream):
         """
         return BasicAuthenticator.create_for_stream(
             self,
-            username=self.config.get("username", ""),
-            password=self.config.get("password", ""),
+            username=self.config.get("api_key", ""),
+            password="",
         )
 
     @property
