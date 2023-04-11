@@ -33,8 +33,8 @@ class ContactsStream(FreshdeskStream):
     name = "contacts"
 
 
-class TicketsSummaryStream(PagedFreshdeskStream):
-    name = "tickets_summary"
+class TicketsAbridgedStream(PagedFreshdeskStream):
+    name = "tickets_abridged"
     replication_key = 'updated_at'
 
     def __init__(self, *args, **kwargs):
@@ -66,7 +66,7 @@ class TicketsSummaryStream(PagedFreshdeskStream):
         }
 
 class TicketsDetailStream(FreshdeskStream):
-    name = 'zzzz_tickets_detail'   # needs the z's to run AFTER ticket_summary
+    name = 'tickets_detail'   # needs the z's to run AFTER ticket_summary
 
     def __init__(self, *args, **kwargs):
         self.ticket_ids: set = kwargs.pop('ticket_ids')

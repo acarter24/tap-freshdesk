@@ -64,7 +64,7 @@ class Tapfreshdesk(Tap):
             streams.TicketFieldsStream(self),
             streams.GroupsStream(self),
             streams.ContactsStream(self),
-            streams.TicketsSummaryStream(tap=self, ticket_ids=_ticket_ids),
+            streams.TicketsAbridgedStream(tap=self, ticket_ids=_ticket_ids),
             streams.TicketsDetailStream(tap=self, ticket_ids=_ticket_ids),
             streams.ConversationsStream(self),
         ]
