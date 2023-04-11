@@ -115,12 +115,13 @@ class TicketsDetailStream(FreshdeskStream):
         Yields:
             An item for every record in the response.
         """
-        paginator = self.get_new_paginator()
-        decorated_request = self.request_decorator(self._request)
         context = context or {}
-        
+
         for ticket_id in self.ticket_ids:
             context['ticket_id'] = ticket_id
+
+            paginator = self.get_new_paginator()
+            decorated_request = self.request_decorator(self._request)
 
             with metrics.http_request_counter(self.name, self.path) as request_counter:
                 request_counter.context = context
