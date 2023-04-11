@@ -12,7 +12,6 @@ from tap_freshdesk import streams
 from pathlib import Path
 config = Path(__file__).parent.parent / '.secrets' / 'config.json'
 
-from collections import deque
 _ticket_ids = set()
 
 
