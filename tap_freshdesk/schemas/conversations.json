@@ -69,7 +69,7 @@
                         "type": ["null", "string"]
                     },
                     "size": {
-                        "type": ["null", "string"]
+                        "type": ["null", "integer"]
                     },
                     "created_at": {
                         "anyOf": [
