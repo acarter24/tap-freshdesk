@@ -1,6 +1,9 @@
 {
     "type": "object",
     "properties": {
+        "body": {
+            "type": ["null", "string"]
+        },
         "body_text": {
             "type": ["null", "string"]
         },
@@ -50,6 +53,54 @@
         },
         "last_edited_user_id": {
             "type": ["null", "integer"]
+        },
+        "attachments": {
+            "type": ["array"],
+            "items": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": ["null", "integer"]
+                    },
+                    "name": {
+                        "type": ["null", "string"]
+                    },
+                    "content_type": {
+                        "type": ["null", "string"]
+                    },
+                    "size": {
+                        "type": ["null", "integer"]
+                    },
+                    "created_at": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "updated_at": {
+                        "anyOf": [
+                            {
+                                "type": "string",
+                                "format": "date-time"
+                            },
+                            {
+                                "type": "null"
+                            }
+                        ]
+                    },
+                    "attachment_url": {
+                        "type": ["null", "string"]
+                    },
+                    "thumb_url": {
+                        "type": ["null", "string"]
+                    }
+                }
+            }
         },
         "automation_id": {
             "type": ["null", "integer"]
