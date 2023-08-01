@@ -32,6 +32,8 @@ class GroupsStream(FreshdeskStream):
 class ContactsStream(FreshdeskStream):
     name = "contacts"
 
+class EmailConfigsStream(FreshdeskStream):
+    name = "email_configs"
 
 class TicketsAbridgedStream(PagedFreshdeskStream):
     name = "tickets_abridged"

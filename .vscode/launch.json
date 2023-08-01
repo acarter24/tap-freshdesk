@@ -8,7 +8,17 @@
         "type": "python",
         "request": "launch",
         "module": "tap_freshdesk.tap",
-        "args": ["--config", ".secrets/config.json",],
+        "args": ["--config", ".secrets/config.json", ">", "test.txt"],
+        "python": "${command:python.interpreterPath}",
+        // Set to true to debug third-party library code
+        "justMyCode": true,
+      }
+      {
+        "name": "tap-freshdesk invoke",
+        "type": "python",
+        "request": "launch",
+        "module": "tap_freshdesk.tap",
+        "args": ["--config", ".secrets/config.json", "--test"],
         "python": "${command:python.interpreterPath}",
         // Set to true to debug third-party library code
         "justMyCode": true,
