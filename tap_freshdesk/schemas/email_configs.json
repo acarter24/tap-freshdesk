@@ -1,0 +1,74 @@
+{
+    "type": "object", 
+    "properties": {
+        "id": {
+            "type": [
+                "integer"
+            ]
+        },
+        "name": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "product_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "to_email": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "reply_email": {
+            "type": [
+                "string",
+                "null"
+            ]
+        },
+        "group_id": {
+            "type": [
+                "integer",
+                "null"
+            ]
+        },
+        "primary_role": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "active": {
+            "type": [
+                "boolean",
+                "null"
+            ]
+        },
+        "created_at": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        },
+        "updated_at": {
+            "anyOf": [
+                {
+                    "type": "string",
+                    "format": "date-time"
+                },
+                {
+                    "type": "null"
+                }
+            ]
+        }
+    }
+}
