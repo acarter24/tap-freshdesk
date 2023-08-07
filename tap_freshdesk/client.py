@@ -117,6 +117,11 @@ class FreshdeskStream(RESTStream):
             A dictionary of URL query parameters.
         """
         params: dict = {}
+        embeds = self.config.get('embeds')
+        if embeds:
+            embed_fields = embeds.get(self.name, [])
+            if embed_fields:   # i.e. 'stats,company,sla_policy'
+                params['include'] = ','.join(embed_fields)
         return params
 
     def prepare_request_payload(
