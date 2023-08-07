@@ -14,11 +14,11 @@
         "justMyCode": true,
       }
       {
-        "name": "tap-freshdesk invoke",
+        "name": "tap-freshdesk about",
         "type": "python",
         "request": "launch",
         "module": "tap_freshdesk.tap",
-        "args": ["--config", ".secrets/config.json", "--test"],
+        "args": ["--config", ".secrets/config.json", "--about"],
         "python": "${command:python.interpreterPath}",
         // Set to true to debug third-party library code
         "justMyCode": true,
