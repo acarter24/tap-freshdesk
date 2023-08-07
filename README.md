@@ -51,6 +51,29 @@ This Singer tap will automatically import any environment variables within the w
 `.env` if the `--config=ENV` is provided, such that config values will be considered if a matching
 environment variable is set either in the terminal context or in the `.env` file.
 
+#### Embeds
+The Freshdesk Tickets API allows for a number of 'embeds' - these are extra fields which can be returned from the API, at the cost of consuming more 'credits'.
+Turning on these embeds will return more data, but mean that the 'cooloff' happens sooner, and overall syncs may take longer.
+
+See Freshdesk docs here: https://developers.freshdesk.com/api/#view_a_ticket
+
+The available embeds for tickets are specified under the `embeds -> tickets_detail` config key:
+```
+config:
+  embeds:
+    tickets_detail:
+      - stats
+      - sla_policy
+      - company
+      - requester
+```
+
+These extra values will be returned as json objects rather than unpacked in the main schema.
+
+If you don't need these data items, then just don't include the `embeds` key in `meltano.yml` and only the base ticket fields will be returned.
+
+As Freshdesk enables more embeds, they will be added here.
+
 ### Source Authentication and Authorization
 
 <!--

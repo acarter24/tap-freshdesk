@@ -1,0 +1,64 @@
+{
+    "type": "object",
+    "properties": {
+        "id": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "name": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "description": {
+            "type": [
+                "null",
+                "string"
+            ]
+        },
+        "active": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "sla_target": {
+            "type": [
+                "null",
+                "object"
+            ]
+        },
+        "applicable_to": {
+            "type": "object"
+        },
+        "is_default": {
+            "type": [
+                "null",
+                "boolean"
+            ]
+        },
+        "position": {
+            "type": [
+                "null",
+                "integer"
+            ]
+        },
+        "created_at": {
+            "type": [
+                "null", 
+                "string"
+            ], 
+            "format": "date-time"
+        },
+        "updated_at": {
+            "type": [
+                "null", 
+                "string"
+            ], 
+            "format": "date-time"
+        }
+    }
+}

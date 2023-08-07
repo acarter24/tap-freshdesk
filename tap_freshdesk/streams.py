@@ -35,6 +35,9 @@ class ContactsStream(FreshdeskStream):
 class EmailConfigsStream(FreshdeskStream):
     name = "email_configs"
 
+class SlaPoliciesStream(FreshdeskStream):
+    name = "sla_policies"
+
 class TicketsAbridgedStream(PagedFreshdeskStream):
     name = "tickets_abridged"
     replication_key = 'updated_at'

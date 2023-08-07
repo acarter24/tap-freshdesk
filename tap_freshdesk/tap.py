@@ -39,6 +39,17 @@ class Tapfreshdesk(Tap):
             th.StringType,
             description="The url for the API service",
         ),
+        th.Property(
+            "embeds",
+            th.ObjectType(
+                th.Property(
+                    'tickets_detail', th.ArrayType(
+                        th.StringType(allowed_values=['requester', 'company', 'stats', 'sla_policy'])
+                        )
+                ),
+            ),
+            description='Dictionary of embeds for each stream, see more at https://developers.freshdesk.com/api/'
+        ),
         ## these two below to enable stream mapping
         th.Property(
             "stream_maps",
@@ -68,6 +79,7 @@ class Tapfreshdesk(Tap):
             streams.TicketsDetailStream(tap=self, ticket_ids=_ticket_ids),
             streams.ConversationsStream(self),
             streams.EmailConfigsStream(self),
+            streams.SlaPoliciesStream(self),
         ]
 
 
