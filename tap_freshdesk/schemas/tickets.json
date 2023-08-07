@@ -357,6 +357,44 @@
             "format": "date-time"
           }
         }
+      },
+      "sla_policy": {
+        "type": [
+          "null",
+          "object"
+        ],
+        "properties": {
+          "id": {
+            "type": [
+              "null",
+              "integer"
+            ]
+          },
+          "name": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "description": {
+            "type": [
+              "null",
+              "string"
+            ]
+          },
+          "active": {
+            "type": [
+              "null",
+              "boolean"
+            ]
+          },
+          "sla_target": {
+            "type": [
+              "null",
+              "object"
+            ]
+          }
+        }
       }
-    }
   }
+}
