@@ -13,11 +13,11 @@ from tap_freshdesk.client import FreshdeskStream, PagedFreshdeskStream
 SCHEMAS_DIR = Path(__file__).parent / Path("./schemas")
 
 
-class AgentsStream(FreshdeskStream):
+class AgentsStream(PagedFreshdeskStream):
     name = "agents"
     
 
-class CompaniesStream(FreshdeskStream):
+class CompaniesStream(PagedFreshdeskStream):
     name = "companies"
 
 
@@ -25,17 +25,17 @@ class TicketFieldsStream(FreshdeskStream):
     name = "ticket_fields"
 
 
-class GroupsStream(FreshdeskStream):
+class GroupsStream(PagedFreshdeskStream):
     name = "groups"
 
 
-class ContactsStream(FreshdeskStream):
+class ContactsStream(PagedFreshdeskStream):
     name = "contacts"
 
-class EmailConfigsStream(FreshdeskStream):
+class EmailConfigsStream(PagedFreshdeskStream):
     name = "email_configs"
 
-class SlaPoliciesStream(FreshdeskStream):
+class SlaPoliciesStream(PagedFreshdeskStream):
     name = "sla_policies"
 
 class TicketsAbridgedStream(PagedFreshdeskStream):
@@ -138,7 +138,7 @@ class TicketsDetailStream(FreshdeskStream):
 
                     paginator.advance(resp)
 
-class ConversationsStream(FreshdeskStream):
+class ConversationsStream(PagedFreshdeskStream):
 
     name = "conversations"
 
