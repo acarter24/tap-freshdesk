@@ -211,6 +211,7 @@ class PagedFreshdeskStream(FreshdeskStream):
         Returns:
             A dictionary of URL query parameters.
         """
+        context = context or {}
         params = super().get_url_params(context, next_page_token)
         params['per_page'] = 100
         if next_page_token:
