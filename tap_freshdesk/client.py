@@ -6,6 +6,8 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, TYPE_CHECKING, Generator
 
 import requests
+from http import HTTPStatus
+from urllib.parse import urlparse
 from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
@@ -183,6 +185,37 @@ class FreshdeskStream(RESTStream):
     
     def backoff_jitter(self, value: float) -> float:
         return value
+
+    # Handling error, overriding this method from RESTStream
+    def response_error_message(self, response: requests.Response) -> str:
+        """Build error message for invalid http statuses.
+
+        WARNING - Override this method when the URL path may contain secrets or PII
+
+        Args:
+            response: A :class:`requests.Response` object.
+
+        Returns:
+            str: The error message
+        """
+        full_path = urlparse(response.url).path or self.path
+        error_type = (
+            "Client"
+            if HTTPStatus.BAD_REQUEST
+            <= response.status_code
+            < HTTPStatus.INTERNAL_SERVER_ERROR
+            else "Server"
+        )
+        
+        error_details = [
+            f"Error detail(s): {index+1}. Message: {error['message']}. Parameter: {error['field']}"
+            for index, error in enumerate(response["error"])]
+
+        return (
+            f"{response.status_code} {error_type} Error: "
+            f"{response.reason} for path: {full_path}"
+            f"Errors: {'. '.join(error_details)}."
+        )
 
 class FreshdeskPaginator(BasePageNumberPaginator):
 
