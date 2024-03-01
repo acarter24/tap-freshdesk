@@ -191,8 +191,10 @@ class FreshdeskPaginator(BasePageNumberPaginator):
         There is no 'has more' indicator for this stream.
         If there are no results on this page, then this is 'last' page, 
         (even though technically the page before was the last, there was no way to tell).
+        A maximum of 300 pages can be returned.
+        Refer : https://developers.freshdesk.com/api/#companies
         """
-        return len(response.json())
+        return len(response.json()) != 0 and self.current_value <= 300
     
 
 class PagedFreshdeskStream(FreshdeskStream):
