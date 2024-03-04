@@ -6,6 +6,7 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, TYPE_CHECKING, Generator
 
 import requests
+import json
 from http import HTTPStatus
 from urllib.parse import urlparse
 from singer_sdk.authenticators import BasicAuthenticator
@@ -206,16 +207,26 @@ class FreshdeskStream(RESTStream):
             < HTTPStatus.INTERNAL_SERVER_ERROR
             else "Server"
         )
-        
-        error_details = [
-            f"Error detail(s): {index+1}. Message: {error['message']}. Parameter: {error['field']}"
-            for index, error in enumerate(response["error"])]
+
+        error_details = []
+
+        if response.status_code >= 400:
+            try:
+                error_response = response.json()
+                if 'error' in error_response:
+                    errors = error_response['error']
+                    error_details = [
+                        f"Error detail(s): {index+1}. Message: {error.get('message', '')}. Parameter: {error.get('field', '')}"
+                        for index, error in enumerate(errors)]
+            except json.JSONDecodeError:
+                pass
 
         return (
             f"{response.status_code} {error_type} Error: "
-            f"{response.reason} for path: {full_path}"
+            f"{response.reason} for path: {full_path}. "
             f"Errors: {'. '.join(error_details)}."
         )
+
 
 class FreshdeskPaginator(BasePageNumberPaginator):
 
