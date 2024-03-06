@@ -237,7 +237,7 @@ class FreshdeskPaginator(BasePageNumberPaginator):
         If there are no results on this page, then this is 'last' page, 
         (even though technically the page before was the last, there was no way to tell).
         """
-        return len(response.json()) != 0 and self.current_value <= 250
+        return len(response.json()) != 0 and self.current_value < 300
     
 
 class PagedFreshdeskStream(FreshdeskStream):
