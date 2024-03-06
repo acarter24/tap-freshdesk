@@ -55,7 +55,7 @@
       "association_type": {
         "type": [
           "null", 
-          "string"
+          "number"
         ]
       }, 
       "associated_tickets_count": {
