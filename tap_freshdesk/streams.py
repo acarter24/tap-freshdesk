@@ -54,6 +54,44 @@ class TicketsAbridgedStream(PagedFreshdeskStream):
     def schema_filepath(self) -> Path | None:
         return SCHEMAS_DIR / 'tickets.json'
     
+    @property
+    def is_sorted(self) -> bool:
+        """Expect stream to be sorted.
+
+        When `True`, incremental streams will attempt to resume if unexpectedly
+        interrupted.
+
+        Returns:
+            `True` if stream is sorted. Defaults to `False`.
+        """
+        return True
+    
+    def get_url_params(
+        self,
+        context: dict | None,
+        next_page_token: Any | None,
+    ) -> dict[str, Any]:
+        """Return a dictionary of values to be used in URL parameterization.
+
+        Args:
+            context: The stream context.
+            next_page_token: The next page index or value.
+
+        Returns:
+            A dictionary of URL query parameters.
+        """
+        context = context or {}
+        params = super().get_url_params(context, next_page_token)
+        params['per_page'] = 100
+        # Adding these parameters for sorting
+        params['order_type'] = "asc"
+        params['order_by'] = "updated_at"
+        if next_page_token: 
+            params["page"] = next_page_token
+        if 'updated_since' not in context:
+            params['updated_since'] = self.get_starting_timestamp(context)
+        return params
+    
     def get_records(self, context: dict | None) -> Iterable[dict[str, Any]]:
         context = context or {}
         records = self.request_records(context=context)
