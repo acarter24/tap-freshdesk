@@ -213,21 +213,20 @@ class FreshdeskStream(RESTStream):
             print(f"Error Response: {response.status_code} {response.reason}")
             try:
                 error_data = response.json()
-                if 'error' in error_data:
-                    errors = error_data['error']
-                    index = 0
-                    for error in errors:
-                        message = error.get('message', 'Unknown')
-                        field = error.get('field', 'Unknown')
-                        error_details.append(f"Error {index + 1}: Message - {message}, Field - {field}")
-                        index += 1
+                errors = error_data.get('errors')
+                index = 0
+                for error in errors:
+                    message = error.get('message', 'Unknown')
+                    field = error.get('field', 'Unknown')
+                    error_details.append(f"Error {index + 1}: Message - {message}, Field - {field}")
+                    index += 1
             except json.JSONDecodeError:
                 return "Error: Unable to parse JSON error response"
         
         return (
             f"{response.status_code} {error_type} Error: "
             f"{response.reason} for path: {full_path}. "
-            f"Errors here by `response_error_message` : {'. '.join(error_details)}."
+            f"Error via function response_error_message : {'. '.join(error_details)}."
         )
 
 class FreshdeskPaginator(BasePageNumberPaginator):
@@ -238,7 +237,7 @@ class FreshdeskPaginator(BasePageNumberPaginator):
         If there are no results on this page, then this is 'last' page, 
         (even though technically the page before was the last, there was no way to tell).
         """
-        return len(response.json()) != 0 and self.current_value <= 300
+        return len(response.json()) != 0 and self.current_value <= 250
     
 
 class PagedFreshdeskStream(FreshdeskStream):
