@@ -6,6 +6,9 @@ from pathlib import Path
 from typing import Any, Callable, Iterable, TYPE_CHECKING, Generator
 
 import requests
+import json
+from http import HTTPStatus
+from urllib.parse import urlparse
 from singer_sdk.authenticators import BasicAuthenticator
 from singer_sdk.helpers.jsonpath import extract_jsonpath
 from singer_sdk.streams import RESTStream
@@ -183,6 +186,49 @@ class FreshdeskStream(RESTStream):
     
     def backoff_jitter(self, value: float) -> float:
         return value
+    
+    # Handling error, overriding this method over RESTStream's Class
+    def response_error_message(self, response: requests.Response) -> str:
+        """Build error message for invalid http statuses.
+
+        WARNING - Override this method when the URL path may contain secrets or PII
+
+        Args:
+            response: A :class:`requests.Response` object.
+
+        Returns:
+            str: The error message
+        """
+        full_path = urlparse(response.url).path or self.path
+        error_type = (
+            "Client"
+            if HTTPStatus.BAD_REQUEST
+            <= response.status_code
+            < HTTPStatus.INTERNAL_SERVER_ERROR
+            else "Server"
+        )
+
+        error_details = []
+        if response.status_code >= 400:
+            print(f"Error Response: {response.status_code} {response.reason}")
+            try:
+                error_data = response.json()
+                if 'error' in error_data:
+                    errors = error_data['error']
+                    index = 0
+                    for error in errors:
+                        message = error.get('message', 'Unknown')
+                        field = error.get('field', 'Unknown')
+                        error_details.append(f"Error {index + 1}: Message - {message}, Field - {field}")
+                        index += 1
+            except json.JSONDecodeError:
+                return "Error: Unable to parse JSON error response"
+        
+        return (
+            f"{response.status_code} {error_type} Error: "
+            f"{response.reason} for path: {full_path}. "
+            f"Errors here by `response_error_message` : {'. '.join(error_details)}."
+        )
 
 class FreshdeskPaginator(BasePageNumberPaginator):
 
