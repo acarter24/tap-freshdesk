@@ -31,13 +31,15 @@ class Tapfreshdesk(Tap):
         ),
         th.Property(
             "start_date",
+            required=True,
             th.DateTimeType,
-            description="The earliest record date to sync",
+            description="The earliest record date to sync in ISO 'YYYY-MM-DD' format",
         ),
         th.Property(
             "domain",
             th.StringType,
-            description="The url for the API service",
+            required=True,
+            description="The url for the API service. If your instance is 'skynet.freshdesk.com' then the domain is 'skynet'",
         ),
         th.Property(
             "embeds",
